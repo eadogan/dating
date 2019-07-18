@@ -1,0 +1,3 @@
+spring.data.mongodb:
+  database: datingDB # Database name.
+  uri: mongodb://mongo:27017
