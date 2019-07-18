@@ -17,16 +17,4 @@ public class Credit extends Auditable {
     private Integer tokens;
     private User user;
 
-
-    @Builder
-    public Credit(long id,
-                  Integer tokens,
-                  User user,
-                  Date createdAt,
-                  Date updatedAt) {
-        super(createdAt, updatedAt);
-        this.id = id;
-        this.tokens = tokens;
-        this.user = user;
-    }
 }
