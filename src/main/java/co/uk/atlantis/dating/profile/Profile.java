@@ -1,6 +1,5 @@
 package co.uk.atlantis.dating.profile;
 
-import co.uk.atlantis.dating.account.User;
 import co.uk.atlantis.dating.db.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +13,7 @@ import java.time.LocalDate;
 public class Profile extends Auditable {
 
     private long id;
-    private User user;
+//    private User user;
     private Gender gender;
     private MatchedGender matchedGender;
     private LocalDate dateOfBirth;
