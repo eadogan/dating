@@ -3,7 +3,8 @@ package co.uk.atlantis.dating.controller;
 import co.uk.atlantis.dating.model.User;
 import co.uk.atlantis.dating.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,30 +13,27 @@ import java.util.List;
 @RestController
 public class UserController {
 
-    @Autowired
     private UserService userService;
 
-    //@Secured({"ROLE_ADMIN", "ROLE_USER"})
-//    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @GetMapping(value = "/users")
     public List<User> listUser(){
         return userService.findAll();
     }
 
-    //@Secured("ROLE_USER")
-//    @PreAuthorize("hasRole('USER')")
-    ////@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping(value = "/users/{id}")
-    public User getOne(@PathVariable(value = "id") Long id){
-        return userService.findById(id);
+    public ResponseEntity<User> getOne(@PathVariable(value = "id") String id){
+        User user = userService.findById(id);
+        return ResponseEntity.ok(user);
     }
-
 
     @PostMapping(value="/signup")
-    public User saveUser(@RequestBody User user){
-        return userService.save(user);
+    public ResponseEntity<User> saveUser(@RequestBody User user){
+        userService.save(user);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
-
 
 }

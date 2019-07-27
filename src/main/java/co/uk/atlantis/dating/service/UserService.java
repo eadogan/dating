@@ -10,7 +10,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 
 @Service
@@ -36,19 +39,21 @@ public class UserService implements UserDetailsService {
 		return list;
 	}
 
-	public void delete(long id) {
-		repository.deleteById(id);
+	public void delete(String id) {
+		repository.deleteByIdentification(id);
 	}
 
 	public User findOne(String username) {
 		return repository.findByUsername(username);
 	}
 
-	public User findById(Long id) {
-		return repository.findById(id).get();
+	public User findById(String id) {
+		return repository.findByIdentification(id);
 	}
 
     public User save(User user) {
+		UUID identification = UUID.randomUUID();
+		user.setIdentification(identification.toString());
 	    user.setUsername(user.getUsername());
 	    user.setPassword(bcryptEncoder.encode(user.getPassword()));
 	    user.setRoles(Collections.singleton(Role.ROLE_ANONYMUS));
