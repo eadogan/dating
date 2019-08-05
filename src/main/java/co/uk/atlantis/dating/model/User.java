@@ -17,6 +17,8 @@ public class User {
     private String identification;
     private String username;
     private String password;
+    private String email;
     private Set<Role> roles;
-
+    private boolean isEnable;
+    private String confirmationToken;
 }

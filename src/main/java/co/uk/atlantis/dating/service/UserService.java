@@ -4,6 +4,7 @@ import co.uk.atlantis.dating.model.Role;
 import co.uk.atlantis.dating.model.User;
 import co.uk.atlantis.dating.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,6 +25,9 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private BCryptPasswordEncoder bcryptEncoder;
+
+	@Autowired
+	private EmailSenderService emailSenderService;
 
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = repository.findByUsername(username);
@@ -57,6 +61,22 @@ public class UserService implements UserDetailsService {
 	    user.setUsername(user.getUsername());
 	    user.setPassword(bcryptEncoder.encode(user.getPassword()));
 	    user.setRoles(Collections.singleton(Role.ROLE_ANONYMUS));
+	    user.setEnable(false);
+	    emailConfirmation(user);
         return repository.save(user);
     }
+
+    private void emailConfirmation(User user) {
+		// Generate random 36-character string token for confirmation link
+		user.setConfirmationToken(UUID.randomUUID().toString());
+
+		SimpleMailMessage registrationEmail = new SimpleMailMessage();
+		registrationEmail.setTo(user.getEmail());
+		registrationEmail.setSubject("Registration Confirmation");
+		registrationEmail.setText("To confirm your e-mail address, please click the link below:\n"
+				+ "/confirm?token=" + user.getConfirmationToken());
+
+		emailSenderService.sendEmail(registrationEmail);
+
+	}
 }

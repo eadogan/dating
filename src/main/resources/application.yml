@@ -6,3 +6,14 @@ spring.data.mongodb:
 security:
   token:
     secret.key: Asjfwol2asf123142Ags1k23hnSA36as6f4qQ324FEsvb
+
+
+
+  # Other properties
+spring.mail.properties.mail.smtp:
+  auth: true
+  connectiontimeout: 5000
+  timeout: 5000
+  writetimeout: 5000
+  starttls:
+    enable: true
